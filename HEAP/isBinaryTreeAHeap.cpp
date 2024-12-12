@@ -12,7 +12,41 @@ struct Node {
         left = right = NULL;
     }
 };
-class Solution {
+class Solution2 {
+  public:
+  bool isMax(struct Node* tree,int i,int &cnt){
+      if(tree==NULL)
+        return true;
+      if(i>=++cnt)
+        return false;
+      bool left = isMax(tree->left,2*i+1,cnt);
+      bool right = isMax(tree->right,2*i+2,cnt);
+      return (left && right);
+      
+  }
+  bool isOrder(struct Node* tree){
+      if(tree==NULL){
+          return true;
+      }
+      if(tree->left==NULL && tree->right==NULL)
+        return true;
+      if(tree->right==NULL){
+          return tree->data>tree->left->data;
+      }
+      bool left=isOrder(tree->left);
+      bool right=isOrder(tree->right);
+      return ( left && right && tree->data>tree->left->data && tree->data>tree->right->data);
+  }
+    bool isHeap(struct Node* tree) {
+        // code here
+        int count=0;
+        if(isMax(tree,0,count) && isOrder(tree)){
+            return true;
+        }
+        return false;
+    }
+};
+class Solution1 {
   public:
   int countNodes(struct Node* tree){
       if(tree==NULL)
