@@ -1,7 +1,13 @@
 #include<bits/stdc++.h>
 using namespace std;
 int signum(int a, int b) {
-    return (a > b) - (a < b);
+    if(a==b){
+        return 0;
+    }else if(a>b){
+        return 1;
+    }else{
+        return -1;
+    }
 }
 vector<int> findMedian(vector<int> &arr, int n){
 	
@@ -9,47 +15,54 @@ vector<int> findMedian(vector<int> &arr, int n){
 	priority_queue<int,vector<int>,greater<int>> minHeap;
 	priority_queue<int> maxHeap;
 	vector<int> ans;
+    int median=0;
 	for(int i=0;i<n;i++){
-		// For first element or second element.
-		if(maxHeap.empty() || minHeap.empty()){
-			// If first element push it in maxHeap.
-			if(maxHeap.empty()){
-		   maxHeap.push(arr[i]);
-			}else{
-				// If second elemnt is greater than first element then push it in minHeap.
-               if(arr[i]>maxHeap.top()){
-				   minHeap.push(arr[i]);
-			   }else{
-				   minHeap.push(maxHeap.top());
-				   maxHeap.pop();
-				   maxHeap.push(arr[i]);
-			   }
-			}
-		}else{
-         if(arr[i]>maxHeap.top()){
-			 minHeap.push(arr[i]);
-		 }else{
-			 maxHeap.push(arr[i]);
-		 }
-		}
+        int element=arr[i];
 		// Find Median
 		switch(signum(maxHeap.size(),minHeap.size())){
 			case 0:{
-				int median=(maxHeap.top()+minHeap.top())/2;
-		   		ans.push_back(median);
-				   break;
-				
+                if(element>median){
+                    minHeap.push(element);
+                    median=minHeap.top();
+                }else{
+                    maxHeap.push(element);
+                    median=maxHeap.top();
+                   
+                }
+				break;			
 			}
 			case 1:{
-				ans.push_back(maxHeap.top());
+				if(element>median){
+                    minHeap.push(element);
+                    median=(maxHeap.top()+minHeap.top())/2;
+                    
+                }else{
+                    minHeap.push(maxHeap.top());
+                    maxHeap.pop();
+                    maxHeap.push(element);
+                    median=(maxHeap.top()+minHeap.top())/2;
+                   
+                }
 				break;
 			}
 			case -1:{
-				ans.push_back(minHeap.top());
+				if(element>median){
+                    maxHeap.push(minHeap.top());
+                    minHeap.pop();
+                    minHeap.push(element);
+                    median=(maxHeap.top()+minHeap.top())/2;
+                    
+                }else{
+                    maxHeap.push(element);
+                    median=(maxHeap.top()+minHeap.top())/2;
+                    
+                }
 				break;
 			}
+
 		}
+        ans.push_back(median);
        
 	}
-	return ans;
+   return ans;
 }
