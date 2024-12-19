@@ -1,3 +1,5 @@
+//  Rearrange string
+// https://www.naukri.com/code360/problems/rearrange-string_982765?leftPanelTab=0&utm_source=youtube&utm_medium=affiliate&utm_campaign=Lovebabbar&leftPanelTabValue=SOLUTION
 #include <bits/stdc++.h> 
 using namespace std;
 string reArrangeString(string &s)
