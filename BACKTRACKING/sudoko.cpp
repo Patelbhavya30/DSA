@@ -1,4 +1,5 @@
-#include <bits/stdc++.h> 
+#include <bits/stdc++.h>
+using namespace std;
 bool isPossible(int num,int row,int col,vector<vector<bool>> rowCheck,vector<vector<bool>> colCheck,vector<vector<bool>> boxCheck){
   return (!rowCheck[row][num] && !colCheck[col][num] && !boxCheck[(row/3)*3+(col/3)][num]);
 }
