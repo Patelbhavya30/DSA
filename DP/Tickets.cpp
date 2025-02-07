@@ -27,20 +27,42 @@ int tab(int n, vector<int>& days, vector<int>& cost){
     dp[n]=0;
     
     for(int k=n-1;k>=0;k--){
-    int oneDayPass=cost[0] + dp[k+1];
+        int oneDayPass=cost[0] + dp[k+1];
 
-    int i;
+        int i;
     for(i=k;i<n && days[i]<days[k]+7;i++);
     int sevenDayPass=cost[1] + dp[i];
 
     for(i=k;i<n && days[i]<days[k]+30;i++);
     int oneMonthPass=cost[2] + dp[i];
 
-
-
     dp[k] = min(min(oneDayPass,sevenDayPass),oneMonthPass);
     }
     return dp[0];
+
+}
+
+// space optimized to O(30) == O(1)
+int spaceOp(int n, vector<int>& days, vector<int>& cost){
+
+    int ans=0;
+    queue<pair<int,int>> weekDays;
+    queue<pair<int,int>> monthDays;
+
+    for(int day:days){
+
+
+    while(!weekDays.empty() && weekDays.front().first + 7 <= day)
+        weekDays.pop();
+    while(!monthDays.empty() && monthDays.front().first + 30 <= day)
+        monthDays.pop();
+
+    weekDays.push(make_pair(day,ans+cost[1]));
+    monthDays.push(make_pair(day,ans+cost[2]));
+    ans = min(min(weekDays.front().second,monthDays.front().second),ans+cost[0]);
+    }
+    
+    return ans;
 
 }
 
@@ -52,5 +74,7 @@ int minimumCoins(int n, vector<int> days, vector<int> cost)
     // vector<int> dp(n+1,-1);
     // return rec(n,days,cost,0,dp);
 
-    return tab(n,days,cost);
+    // return tab(n,days,cost);
+
+    return spaceOp(n,days,cost);
 }
