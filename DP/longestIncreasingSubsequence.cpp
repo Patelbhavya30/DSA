@@ -24,12 +24,76 @@ class Solution {
           
           
         
-    } 
+    }
+    
+    int tab(vector<int>& arr){
+          int n=arr.size();
+          vector<vector<int>> dp(n+1,vector<int>(n+1,0));
+          
+          for(int curr=n-1;curr>=0;curr--){
+              
+          for(int prev=n-1;prev>=-1;prev--){
+              
+          int incans=0,excans=0;
+          
+          
+          excans=dp[curr+1][prev+1];
+          
+          if(prev==-1 || arr[prev] < arr[curr])
+          {
+              incans= 1 + dp[curr+1][curr+1];
+          }
+              
+          dp[curr][prev+1]=max(excans,incans);
+          }
+          
+          }
+          
+          return dp[0][0];
+          
+          
+        
+    }
+    int space(vector<int>& arr){
+          int n=arr.size();
+          
+          vector<int> currRow(n+1,0);
+          vector<int> nextRow(n+1,0);
+          
+          for(int curr=n-1;curr>=0;curr--){
+              
+          for(int prev=n-1;prev>=-1;prev--){
+              
+          int incans=0,excans=0;
+          
+          
+          excans=nextRow[prev+1];
+          
+          if(prev==-1 || arr[prev] < arr[curr])
+          {
+              incans= 1 + nextRow[curr+1];
+          }
+              
+          currRow[prev+1]=max(excans,incans);
+          }
+          nextRow=currRow;
+          
+          }
+          
+          return nextRow[0];
+          
+          
+        
+    }
       int lis(vector<int>& arr) {
           // code here
-          int n=arr.size();
-          vector<vector<int>> dp(n,vector<int>(n+1,-1));
-          return rec(arr,n,0,-1,dp);
+        //   int n=arr.size();
+        //   vector<vector<int>> dp(n,vector<int>(n+1,-1));
+        //   return rec(arr,n,0,-1,dp);
+        
+        // return tab(arr);
+        return space(arr);
+          
+          
       }
   };
-  
