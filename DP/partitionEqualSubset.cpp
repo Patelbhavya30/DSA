@@ -39,21 +39,21 @@ class Solution {
         return dp[index][sum]=include || exclude;
     }
     
-    bool tab(vector<int>& arr,int sumValue){
+    bool tab(vector<int>& arr,int target){
         
         int n = arr.size();
             
-        // int sumValue=accumulate(arr.begin(), arr.end(), 0);
-        vector<vector<bool>> dp(n+1,vector<bool>(sumValue,false));
+        // int target=accumulate(arr.begin(), arr.end(), 0);
+        vector<vector<bool>> dp(n+1,vector<bool>(target+1,false));
         
         for(int i=0;i<=n;i++)
         {
             dp[i][0]=true;
         }
         
-        for(int index=n-1;index>=0;index++){
-            for(int sum=0;sum<=sumValue/2;sum++){
-                bool include;
+        for(int index=n-1;index>=0;index--){
+            for(int sum=0;sum<=target;sum++){
+                bool include=false;
                 if(sum-arr[index] >=0){
                     include=dp[index+1][sum-arr[index]];
                 }
@@ -62,7 +62,33 @@ class Solution {
             }
         }
         
-        return dp[0][sumValue/2];
+        return dp[0][target];
+    }
+    bool spaceOp(vector<int>& arr,int target){
+        
+        int n = arr.size();
+            
+        // int target=accumulate(arr.begin(), arr.end(), 0);
+        // vector<vector<bool>> dp(n+1,vector<bool>(target+1,false));
+        vector<bool> curr(target+1,false);
+        vector<bool> next(target+1,false);
+        
+        next[0]=true;
+        curr[0]=true;
+        
+        for(int index=n-1;index>=0;index--){
+            for(int sum=0;sum<=target;sum++){
+                bool include=false;
+                if(sum-arr[index] >=0){
+                    include=next[sum-arr[index]];
+                }
+                bool exclude=next[sum];
+                curr[sum] = include || exclude;
+            }
+            next=curr;
+        }
+        
+        return next[target];
     }
     
     bool equalPartition(vector<int>& arr) {
@@ -76,7 +102,8 @@ class Solution {
         if(sum & 1)
             return false;
         else 
-            return tab(arr,sum);
+            return spaceOp(arr,sum/2);
+            // return tab(arr,sum/2);
             // return recMem(arr,0,n,0,sum/2,dp);
             // return rec(arr,0,n,0,sum/2);
         
